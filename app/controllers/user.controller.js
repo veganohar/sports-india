@@ -27,7 +27,7 @@ exports.signup = (req,res)=>{
 
 exports.signin = (req,res)=>{
   
-    User.findOne({$or:[{username:req.body.username},{email: req.body.email}]},(err,user)=>{
+    User.findOne({$or:[{username:req.body.username},{email: req.body.username}]},(err,user)=>{
         if (err) {
             res.status(500).send({ message: err });
             return;

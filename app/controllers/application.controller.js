@@ -28,14 +28,14 @@ exports.getAllApplications = (req, res) => {
   })
 };
 exports.getApplications = (req,res)=>{
-  Application.find().sort('-createdOn').skip(Number(req.params.skip)).limit(Number(req.params.limit)).populate(populateOptions).exec((err, allApplications) => {
+  Application.find().sort('-createdOn').skip(Number(req.params.skip)).limit(Number(req.params.limit)).populate(populateOptions).exec((err, applications) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
     res.send({ 
       status: 200,
-      data: allApplications
+      data: applications
     })
   })
 }
@@ -144,19 +144,18 @@ exports.createApplication = async (req, res) => {
     let applicantId = await applicationMiddleware.createApplicationNumber();
     let application = new Application();
     let fd = JSON.parse(req.body.fd);
+    console.log(fd);
     for (let p in fd ) {
       application[p] = typeof(fd[p])=="string"?fd[p].trim():fd[p];
     }
-    // application.address = JSON.parse(application.address);
-    // application.qualifications = JSON.parse(application.qualifications);
     application.applicantId = applicantId;
     application.image = files.image[0].filename;
     application.photoid_proof = {
-      name: req.body.photoid_proof,
+      name: fd.photoid_proof,
       file: files.photoid_proof[0].filename
     },
       application.addressid_proof = {
-        name: req.body.addressid_proof,
+        name: fd.addressid_proof,
         file: files.addressid_proof[0].filename
       },
       files.cv ? application.cv = files.cv[0].filename : '';
