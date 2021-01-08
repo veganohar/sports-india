@@ -1,4 +1,5 @@
 const controller = require("../controllers/employmenttype.controller");
+const {userMiddleware} = require("../middlewares")
 module.exports = function(app) {
     app.use(function(req, res, next) {
       res.header(
@@ -9,8 +10,8 @@ module.exports = function(app) {
     });
   
     app.get("/api/employmenttypes/getAllEmploymentTypes", controller.getAllEmploymentTypes);
-    app.post("/api/employmenttypes/createEmploymentType", controller.createEmploymentType);
-    app.put("/api/employmenttypes/updateEmploymentType", controller.updateEmploymentType);
+    app.post("/api/employmenttypes/createEmploymentType",[userMiddleware.verifyToken], controller.createEmploymentType);
+    app.put("/api/employmenttypes/updateEmploymentType",[userMiddleware.verifyToken], controller.updateEmploymentType);
     app.delete("/api/employmenttypes/deleteEmploymentType/:etid", controller.deleteEmploymentType);
   };
   

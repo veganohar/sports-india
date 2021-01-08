@@ -1,4 +1,5 @@
 const controller = require("../controllers/employmentsubtype.controller");
+const {userMiddleware} = require("../middlewares")
 module.exports = function(app) {
     app.use(function(req, res, next) {
       res.header(
@@ -8,10 +9,11 @@ module.exports = function(app) {
       next();
     });
   
-    app.get("/api/employmentsubtypes/getAllEmploymentSubTypes", controller.getAllEmploymentSubTypes);
+    app.get("/api/employmentsubtypes/getAllEmploymentSubTypes",[userMiddleware.verifyToken], controller.getAllEmploymentSubTypes);
     app.get("/api/employmentsubtypes/getEmploymentSubTypesByTypeId/:etid", controller.getEmploymentSubTypesByTypeId);
-    app.post("/api/employmentsubtypes/createEmploymentSubType", controller.createEmploymentSubType);
-    app.put("/api/employmentsubtypes/updateEmploymentSubType", controller.updateEmploymentSubType);
-    app.delete("/api/employmentsubtypes/deleteEmploymentSubType/:etsid", controller.deleteEmploymentSubType);
+    app.get("/api/employmentsubtypes/getEmploymentSubTypeById/:estid", controller.getEmploymentSubTypeById);
+    app.post("/api/employmentsubtypes/createEmploymentSubType",[userMiddleware.verifyToken], controller.createEmploymentSubType);
+    app.put("/api/employmentsubtypes/updateEmploymentSubType",[userMiddleware.verifyToken], controller.updateEmploymentSubType);
+    app.delete("/api/employmentsubtypes/deleteEmploymentSubType/:estid",[userMiddleware.verifyToken], controller.deleteEmploymentSubType);
   };
   

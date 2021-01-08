@@ -47,15 +47,17 @@ exports.signin = (req,res)=>{
             });
           }
     
-          var token = jwt.sign({ id: user.id }, config.secret, {
-            expiresIn: 86400 // 24 hours
+          var token = jwt.sign({ id: user.id,username: user.username,email: user.email }, config.secret, {
+            expiresIn: 86400 // 1 hour
           });
-          res.status(200).send({
-            id: user._id,
-            username: user.username,
-            email: user.email,
-            accessToken: token
-          });
+          let decoded = jwt.decode(token);
+            res.status(200).send({
+              id: decoded.id,
+              username: decoded.username,
+              email: decoded.email,
+              accessToken: token,
+              exp:decoded.exp
+            });
     })
 }
 
@@ -71,7 +73,6 @@ exports.changePassword = (req,res)=>{
     res.send({
       message: "Password Changed", 
       status: 200,
-      data: response
     });
   });
 }
@@ -104,10 +105,11 @@ exports.resetPassword = (req,res)=>{
         };
         transporter.sendMail(mailData, function (err, info) {
           if(err){
+            console.log(err);
             res.send({ message: "Password Changed! Mail Error"  });
           }
           else{
-            res.send({ message: "Password Changed! Mail Success" });
+            res.send({ message: "Password Changed! Check your Mail" });
           }
        });
     });

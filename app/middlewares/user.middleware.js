@@ -15,7 +15,7 @@ verifyToken = (req, res, next) => {
       if (err) {
         return res.status(401).send({ message: "Unauthorized!" });
       }
-      req.userId = decoded.id;
+      req.userId = decoded.id; 
       next();
     });
   };
@@ -35,16 +35,16 @@ verifyChangePW = (req,res,next)=>{
       );
 
       if (!passwordIsValid) {
-        return res.status(401).send({
+        return res.status(403).send({
           message: "Invalid Old Password!"
         });
       }else{
         if(req.body.oldPassword===req.body.newPassword){
-          return res.status(401).send({
+          return res.status(403).send({
             message: "New Password should be different from Old Password"
           });
         }else{
-          next();
+          next(); 
         }
 
       }

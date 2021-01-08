@@ -2,7 +2,7 @@ const db = require('../models');
 const EmploymentSubType = db.employmentsubtype;
 
 exports.getAllEmploymentSubTypes = (req, res) => {
-  EmploymentSubType.find().sort('-name').populate("employmenttype","name").exec((err, employmentSubTypes) => {
+  EmploymentSubType.find().sort('name').populate("employmenttype","name").exec((err, employmentSubTypes) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
@@ -27,6 +27,19 @@ exports.getAllEmploymentSubTypes = (req, res) => {
       })
     };
 
+
+    exports.getEmploymentSubTypeById = (req, res) => {
+      EmploymentSubType.findById(req.params.estid).populate("employmenttype","name").exec((err, employmentSubType) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+          res.send({
+            status: 200,
+            data: employmentSubType
+          })
+        })
+      };
 
   exports.createEmploymentSubType=(req,res)=>{
     EmploymentSubType.findOne({ name: req.body.name }, async (err, et) => {

@@ -2,14 +2,14 @@ const db = require('../models');
 const EmploymentType = db.employmenttype;
 
 exports.getAllEmploymentTypes = (req, res) => {
-    EmploymentType.find().sort('-name').exec((err, employmentTypes) => {
+    EmploymentType.find().sort('name').exec((err, employmentTypes) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
       }
       res.send({
         status: 200,
-        data: employmentTypes.reverse()
+        data: employmentTypes
       })
     })
   };
